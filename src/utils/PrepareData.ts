@@ -1,17 +1,17 @@
 export type TableDefinition = {
-    // (technical) name of the field to group by
-    rowField: string;
-    typeField: string;
-    valueField: string;
+  // (technical) name of the field to group by
+  rowField: string
+  typeField: string
+  valueField: string
 
-    // optional mapping of field names to display names
-    // e.g., { "prefix_name": "Name", "age": "Age" }
-    displayNameMapping?: Record<string, string>;
-};
+  // optional mapping of field names to display names
+  // e.g., { "prefix_name": "Name", "age": "Age" }
+  displayNameMapping?: Record<string, string>
+}
 
 // Define the data item Type
 
-export type DataItem = Record<string, string | number | boolean | null | undefined>;
+export type DataItem = Record<string, string | number | boolean | null | undefined>
 
 /**
  * Transforms raw data into a structured format based on the rowField specified in the table definition.
@@ -28,34 +28,34 @@ export type DataItem = Record<string, string | number | boolean | null | undefin
 
  */
 export const prepareData = (rawData: DataItem[] | undefined, tableDefinition: TableDefinition): DataItem[] => {
-    if (!rawData || rawData.length === 0) {
-        return [];
-    }
+  if (!rawData || rawData.length === 0) {
+    return []
+  }
 
-    const rowFieldName = tableDefinition.displayNameMapping?.[tableDefinition.rowField] ?? tableDefinition.rowField;
+  const rowFieldName = tableDefinition.displayNameMapping?.[tableDefinition.rowField] ?? tableDefinition.rowField
 
-    const groupedData = new Map<string, DataItem>();
-    const { typeField, valueField, rowField } = tableDefinition;
+  const groupedData = new Map<string, DataItem>()
+  const { typeField, valueField, rowField } = tableDefinition
 
-    rawData.forEach((item) => {
-        const rowFieldValue = item[rowField] as string;
-        const typeFieldValue = item[typeField] as string;
-        const valueFieldValue = item[valueField];
-        const displayName = tableDefinition.displayNameMapping?.[typeFieldValue] ?? typeFieldValue;
-        const IdName = `${displayName}_Id`;
-        const IdValue = item.Id as string;
+  rawData.forEach((item) => {
+    const rowFieldValue = item[rowField] as string
+    const typeFieldValue = item[typeField] as string
+    const valueFieldValue = item[valueField]
+    const displayName = tableDefinition.displayNameMapping?.[typeFieldValue] ?? typeFieldValue
+    const IdName = `${displayName}_Id`
+    const IdValue = item.Id as string
 
-        const existingData = groupedData.get(rowFieldValue) ?? { [rowFieldName]: rowFieldValue };
-        groupedData.set(rowFieldValue, {
-            ...existingData,
-            [displayName]: valueFieldValue,
-            [IdName]: IdValue,
-        });
-    });
+    const existingData = groupedData.get(rowFieldValue) ?? { [rowFieldName]: rowFieldValue }
+    groupedData.set(rowFieldValue, {
+      ...existingData,
+      [displayName]: valueFieldValue,
+      [IdName]: IdValue,
+    })
+  })
 
-    // Sort by Map keys (rowFields) and return the results as an array
-    const sortedEntries = Array.from(groupedData.entries()).sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
-    return Array.from(new Map(sortedEntries).values());
-};
+  // Sort by Map keys (rowFields) and return the results as an array
+  const sortedEntries = Array.from(groupedData.entries()).sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+  return Array.from(new Map(sortedEntries).values())
+}
 
-export default prepareData;
+export default prepareData
