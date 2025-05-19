@@ -7,11 +7,7 @@ import prepareData, { type DataItem, type TableDefinition } from "./PrepareData"
  * @param fetchFn Function that fetches the data
  * @param tableDefinition Configuration for preparing the data
  */
-export function usePreparedData(
-    queryKey: string,
-    fetchFn: () => Promise<DataItem[]>,
-    tableDefinition: TableDefinition,
-) {
+export function useData(queryKey: string, fetchFn: () => Promise<DataItem[]>, tableDefinition: TableDefinition) {
     const { data, isLoading, error } = useQuery({
         queryKey: [queryKey],
         queryFn: fetchFn,

@@ -3,8 +3,7 @@ import dummyData from "../data/dummyData";
 import type { DataItem } from "./PrepareData";
 
 const getData = (): Promise<DataItem[]> => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         setTimeout(() => {
             //   reject(new Error("Error fetching data")); // Simulate an error
             resolve(dummyData);
